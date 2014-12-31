@@ -65,6 +65,16 @@ document.onmouseup = function() {
     document.onmousemove = null;
 }
 
+function geoToCartesian(coords) {
+
+}
+
+function cartesianToGeo(coords) {
+}
+
+function drawConnection(pointA,pointB) {
+}
+
 function render() {
     requestAnimationFrame(render);
     renderer.render(scene,camera);
