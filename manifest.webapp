@@ -1,0 +1,12 @@
+{
+  "name": "Network Mapper",
+  "description": "An app to view network connections on a world map",
+  "launch_path": "/mapper.html",
+  "icons": {
+   "128": "img/ico128.png"
+  },
+  "developer": {
+   "name": "Rebecca Skinner"
+  },
+  "default_locale": "en"
+}
