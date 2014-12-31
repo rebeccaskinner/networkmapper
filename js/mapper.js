@@ -65,6 +65,12 @@ document.onmouseup = function() {
 }
 
 function geoToCartesian(coords) {
+    // params: λ  Longitude
+    //         φ  Latitude
+    //         φ1 Standard Parallels (defines the ±φ where the projection is
+    //                                accurate)
+    function spherical_projection(λ, φl, φ1) {
+    }
 }
 
 function cartesianToGeo(coords) {
