@@ -11,7 +11,7 @@ var light1 = new THREE.PointLight( 0x404040 // color
                                  );
 light1.position.set(10,10,10);
 
-var light2 = new THREE.PointLight(0xf01010, 3, 100);
+var light2 = new THREE.PointLight(0x808080, 3, 100);
 light2.position.set(10,-10,10);
 
 
@@ -20,12 +20,16 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 /* Create a cube */
-var geometry = new THREE.SphereGeometry( 1 // radius
-                                       , 8 // width segments
-                                       , 8 // height segments
+var geometry = new THREE.SphereGeometry( 3  // radius
+                                       , 32 // width segments
+                                       , 32 // height segments
                                        );
 
-var material = new THREE.MeshLambertMaterial({color: 0x00ff00});
+var material = new THREE.MeshLambertMaterial({color: 0xc2b280});
+var texture = THREE.ImageUtils.loadTexture( "textures/map.png"
+                                          , THREE.SphericalReflectionMapping
+                                          );
+material.map = texture;
 var cube = new THREE.Mesh( geometry
                          , material
                          );
@@ -37,8 +41,8 @@ camera.position.z = 5;
 function render() {
     requestAnimationFrame(render);
     renderer.render(scene,camera);
-    cube.rotation.x += 0.01;
-    cube.rotation.y += 0.01;
+    cube.rotation.x += 0.003;
+    cube.rotation.y += 0.003;
 }
 
 render();
