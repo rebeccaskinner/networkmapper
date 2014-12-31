@@ -42,13 +42,10 @@ var lastX = null;
 var lastY = null;
 
 function getStep(cur,last) {
-    return (last - cur) / 80;
+    return (last - cur) / 100;
 }
 
 document.onmousedown = function(d) {
-    var startX = d.pageX;
-    var startY = d.pageY;
-
     document.onmousemove = function(e) {
         e = e || event;
         lastX = lastX || e.pageX;
@@ -63,10 +60,11 @@ document.onmousedown = function(d) {
 
 document.onmouseup = function() {
     document.onmousemove = null;
+    lastX = null;
+    lastY = null;
 }
 
 function geoToCartesian(coords) {
-
 }
 
 function cartesianToGeo(coords) {
