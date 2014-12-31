@@ -14,32 +14,44 @@ light1.position.set(10,10,10);
 var light2 = new THREE.PointLight(0x808080, 3, 100);
 light2.position.set(10,-10,10);
 
-
 var renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-/* Create a cube */
-var geometry = new THREE.SphereGeometry( 3  // radius
-                                       , 32 // width segments
-                                       , 32 // height segments
-                                       );
-
-var material = new THREE.MeshLambertMaterial({color: 0xc2b280});
-var texture = THREE.ImageUtils.loadTexture( "textures/map.png"
-                                          , THREE.SphericalReflectionMapping
-                                          );
-material.map = texture;
-var cube = new THREE.Mesh( geometry
-                         , material
-                         );
-scene.add(cube);
-scene.add(light1);
-scene.add(light2);
-camera.position.z = 5;
 
 var lastX = null;
 var lastY = null;
+
+var canvas = document.createElement('canvas');
+var ctx = canvas.getContext('2d');
+var img = new Image();
+// var material = new THREE.MeshBasicMaterial({color: 0xc2b280});
+img.src = "textures/map.png";
+
+img.onload = function() {
+    ctx.drawImage(this, 0, 0);
+     texture.needsUpdate = true;
+     canvas.width  = img.width;
+     canvas.height = img.height;
+};
+
+// var texture = THREE.ImageUtils.loadTexture("textures/map.png" , THREE.SphericalReflectionMapping);
+// texture.needsUpdate = true;
+
+/* Create a sphere (radius, width segments, height segments) */
+// var geometry = new THREE.SphereGeometry(3,16,16);
+
+var geometry = new THREE.PlaneGeometry(canvas.width, canvas.height);
+var texture = new THREE.Texture(canvas);
+// var texture = new THREE.Texture(canvas, THREE.SphericalReflectionMapping);
+// var texture = THREE.ImageUtils.loadTexture("textures/map.png" , THREE.SphericalReflectionMapping);
+texture.needsUpdate = true;
+var material = new THREE.MeshBasicMaterial({map: texture});
+var cube = new THREE.Mesh(geometry , material);
+scene.add(cube);
+scene.add(light1);
+scene.add(light2);
+camera.position.z = canvas.width;
 
 function getStep(cur,last) {
     return (last - cur) / 100;
@@ -64,24 +76,29 @@ document.onmouseup = function() {
     lastY = null;
 }
 
-function geoToCartesian(coords) {
-    // params: λ  Longitude
-    //         φ  Latitude
-    //         φ1 Standard Parallels (defines the ±φ where the projection is
-    //                                accurate)
-    function spherical_projection(λ, φl, φ1) {
+function Projection() {
+    Projection.prototype.spherical =
+        function(latitude, longitude, standardParallels) {
+            /* Check to see if we recieved a JSON object instead
+             * of an expanded parameter list */
+            if(latitude.latitude && latitude.longitude) {
+                l = latitude.longitude;
+            }
+            return {x: (longitude * Math.cos(standardParallels)), y: latitude};
     }
-}
-
-function cartesianToGeo(coords) {
-}
-
-function drawConnection(pointA,pointB) {
+    Projection.prototype.plateCarree =
+        function(latitude,longitude) {
+            return {x: longitude, y: latitude};
+    }
 }
 
 function render() {
     requestAnimationFrame(render);
     renderer.render(scene,camera);
+}
+
+function drawPoint(latitude,longitude,radius,color) {
+    proj = Projection.plateCarree(latitude,longitude);
 }
 
 render();
