@@ -38,11 +38,36 @@ scene.add(light1);
 scene.add(light2);
 camera.position.z = 5;
 
+var lastX = null;
+var lastY = null;
+
+function getStep(cur,last) {
+    return (last - cur) / 80;
+}
+
+document.onmousedown = function(d) {
+    var startX = d.pageX;
+    var startY = d.pageY;
+
+    document.onmousemove = function(e) {
+        e = e || event;
+        lastX = lastX || e.pageX;
+        lastY = lastY || e.pageY;
+        cube.rotation.y += getStep(lastX,e.pageX);
+        lastX = e.pageX;
+        cube.rotation.x += getStep(lastY,e.pageY);
+        lastY = e.pageY;
+        requestAnimationFrame(render);
+    };
+}
+
+document.onmouseup = function() {
+    document.onmousemove = null;
+}
+
 function render() {
     requestAnimationFrame(render);
     renderer.render(scene,camera);
-    cube.rotation.x += 0.003;
-    cube.rotation.y += 0.003;
 }
 
 render();
